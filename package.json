@@ -100,7 +100,22 @@
     "typescript": "5.6.3",
     "vite": "^7.1.9"
   },
-  "optionalDependencies": {
+"optionalDependencies": {
     "bufferutil": "^4.0.8"
-  }
+  },
+  "overrides": {
+    "esbuild": "^0.25.0"
+  },
+  "description": "",
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natsu7770/anjulrajam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/natsu7770/anjulrajam/issues"
+  },
+  "homepage": "https://github.com/natsu7770/anjulrajam#readme"
 }
