@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
+import { setupVite } from "./vite";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 

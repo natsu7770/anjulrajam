@@ -1,0 +1,120 @@
+Act as a senior full‑stack developer. Extend my existing “Anjulrajam Hibiscus Bhringraj Hair Oil” e‑commerce site with REAL online payments, proper COD logic, and order notifications. Use clean HTML/CSS/JS on the frontend and a simple Node/Express backend inside this project.
+
+PAYMENT METHODS ON CHECKOUT
+
+On the checkout page, add a “Payment Method” section with two radio options:
+a) Online Payment (Prepaid)
+b) Cash on Delivery (COD)
+
+When the user switches between these options, update the order summary LIVE:
+
+If Online Payment (Prepaid) → courier charge = ₹0 (free shipping).
+
+If COD → courier charge = ₹70, and show this text clearly near it:
+“For Cash on Delivery, you pay ₹70 courier charge in advance. The remaining product amount is payable in cash at delivery.”
+
+The order summary must always show: Product total, Courier charge, Grand total.​
+
+REAL RAZORPAY PAYMENT GATEWAY
+
+Integrate Razorpay Standard Checkout as a REAL payment gateway (not a simulation).
+
+Use a Node/Express backend with these endpoints:
+
+POST /api/create-order
+
+Input: customer details, cart items, totals, selected payment method.
+
+If payment method = “Prepaid”, create a Razorpay order using RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET (stored in environment variables).
+
+Return to the frontend: Razorpay order id, amount, currency, and any other data needed to open Razorpay Checkout.
+
+POST /api/razorpay-webhook
+
+Verify the Razorpay signature.
+
+On successful payment, mark the order as “paid” in the database or JSON file used for storage.
+
+On the frontend, when the customer clicks “Pay Now” for prepaid:
+
+Call /api/create-order.
+
+Use the response to open Razorpay Checkout.
+
+On successful payment, show an Order Confirmation page and trigger order emails.
+
+Keep all Razorpay keys in an environment/config file as:
+RAZORPAY_KEY_ID = "YOUR_KEY_ID_HERE"
+RAZORPAY_KEY_SECRET = "YOUR_KEY_SECRET_HERE"​
+
+COD WITH ADVANCE COURIER PAYMENT
+
+If the user selects COD:
+
+First, charge ₹70 via Razorpay as an “advance courier fee”.
+
+After the ₹70 payment is successful, create an order with status “COD – Courier Paid”.
+
+Show a confirmation message that clearly states:
+“₹70 courier charge has been paid online. Please pay the remaining product amount in cash at the time of delivery.”
+
+SEND ORDER DETAILS TO STORE OWNER EMAIL
+
+After an order is confirmed (prepaid success OR COD courier fee success), send an email to the store owner using a mail library like Nodemailer.
+
+Email details:
+From: no-reply@anjulrajam.in (or similar)
+To: anjulrajam@gmail.com
+Subject: New Order – Anjulrajam Hibiscus Bhringraj Hair Oil
+Body: include customer name, email, phone, WhatsApp number, full address, payment method, courier charge, totals, order id, and payment status.
+
+Keep this email in config/env as:
+STORE_OWNER_EMAIL = "anjulrajam@gmail.com"​
+
+CUSTOMER ORDER CONFIRMATION EMAIL
+
+After successful payment (prepaid or COD courier), send an order confirmation email to the customer’s email entered at checkout.
+
+Subject: Your Anjulrajam hair oil order is confirmed – Order #{orderId}
+
+Body: thank you message, order summary (products, quantity, price), payment method, amount already paid, amount due on delivery for COD, estimated delivery time, and support contacts:
+
+Email: anjulrajam@gmail.com
+
+WhatsApp helpline: 8755373247
+
+WHATSAPP CONTACT INTEGRATION (LIGHTWEIGHT)
+
+In the checkout form, add a field for the customer’s WhatsApp number.
+
+Store this value with the order.
+
+On the Order Confirmation page, show a “Contact us on WhatsApp” button linking to:
+https://wa.me/8755373247?text=Hi%20I%20have%20a%20question%20about%20my%20order%20{orderId}
+
+Also show the WhatsApp helpline number in the site footer and on the Contact page as:
+“WhatsApp Helpline: 8755373247”
+
+In config/env, set:
+STORE_WHATSAPP_NUMBER = "8755373247"​
+
+BASIC ADMIN ORDERS VIEW
+
+Add a simple /admin/orders page (a very basic password check is enough) that lists all orders from storage.
+
+For each order show: order id, date/time, customer name, payment method (Prepaid or COD), payment status, total, courier charge, and order status.
+
+Allow changing order status (New, Packed, Shipped, Delivered) and saving it.
+
+CONFIG SUMMARY AND CLEAN CODE
+
+Put all important settings in a single config or .env file and document them in a short README section:
+RAZORPAY_KEY_ID
+RAZORPAY_KEY_SECRET
+STORE_OWNER_EMAIL = "anjulrajam@gmail.com"
+STORE_WHATSAPP_NUMBER = "8755373247"
+COURIER_CHARGE_COD = 70
+
+Keep the code modular, well‑structured, and easy for a beginner to read and edit later.
+
+Use the existing design, colors, and product name “Anjulrajam Hibiscus Bhringraj Hair Oil”. Do not change layout unnecessarily; just add these payment, COD, email, and WhatsApp features cleanly.
